@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ldconfig
+
+# Remove old Tuttle cache files
+if [ -d /var/www/.tuttleofx ]; then
+    echo Removing old TuttleOFX cache file
+    rm -rf /var/www/.tuttleofx
+fi
+
+
+
