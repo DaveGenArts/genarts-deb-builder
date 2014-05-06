@@ -1,53 +1,100 @@
 #!/bin/bash
 # Builds the genarts-tuttle deb file
 
+usage()
+{
+cat <<EOF
+usage: $0 options
+EOF
+}
+
+VERSION='0.0'
+REVISION='0'
+ARCH='amd64'
+
+ARGS=$(getopt -o v:r:a: -l "version:,revision:,arch:" -- "$@")
+
+if [[ $? -ne 0 ]]; then usage; exit 1; fi
+
+eval set -- "$ARGS";
+
+set -x
+
+while true; do
+    case "$1" in
+	-v|--version)
+	    VERSION="$2"
+	    shift 2 ;;
+	-r|--revision)
+	    REVISION="$2"
+	    shift 2 ;;
+	-a|--arch)
+	    ARCH="$2"
+	    shift 2 ;;
+	--)
+	    shift
+	    break
+	    ;;
+	*) echo "Invalid arg!"
+	    exit 1 ;;
+    esac
+done
+
+GENARTS_TUTTLE=genarts-tuttle_"$VERSION"-"$REVISION"_"$ARCH"
+echo $GENARTS_TUTTLE
+
 # Remove old files
-if [ -d genarts-tuttle ]; then
-    rm -rf genarts-tuttle
+if [ -d $GENARTS_TUTTLE ]; then
+    rm -rf $GENARTS_TUTTLE
 fi
 
-if [ -f genarts-tuttle.deb ]; then
-    rm genarts-tuttle.deb
+if [ -f $GENARTS_TUTTLE.deb ]; then
+    rm $GENARTS_TUTTLE.deb
 fi
 
 # Build directory structure
-mkdir genarts-tuttle
-mkdir genarts-tuttle/DEBIAN
-mkdir genarts-tuttle/etc
-mkdir genarts-tuttle/etc/ld.so.conf.d
-mkdir genarts-tuttle/usr
-mkdir genarts-tuttle/usr/bin
-mkdir genarts-tuttle/usr/lib
-mkdir genarts-tuttle/usr/lib/GenArts
-mkdir genarts-tuttle/usr/lib/python2.7
-mkdir genarts-tuttle/usr/lib/python2.7/dist-packages
-mkdir genarts-tuttle/usr/OFX
-mkdir genarts-tuttle/usr/OFX/Plugins
+mkdir $GENARTS_TUTTLE
+mkdir $GENARTS_TUTTLE/DEBIAN
+mkdir $GENARTS_TUTTLE/etc
+mkdir $GENARTS_TUTTLE/etc/ld.so.conf.d
+mkdir $GENARTS_TUTTLE/usr
+mkdir $GENARTS_TUTTLE/usr/bin
+mkdir $GENARTS_TUTTLE/usr/lib
+mkdir $GENARTS_TUTTLE/usr/lib/GenArts
+mkdir $GENARTS_TUTTLE/usr/lib/python2.7
+mkdir $GENARTS_TUTTLE/usr/lib/python2.7/dist-packages
+mkdir $GENARTS_TUTTLE/usr/OFX
+mkdir $GENARTS_TUTTLE/usr/OFX/Plugins
 
 # Copy control file
-cp ./control ./genarts-tuttle/DEBIAN
+cp ./control ./$GENARTS_TUTTLE/DEBIAN
+
+# Edit Control file for correct version, revision, and arch
+sed -i s/__VERSION__/"$VERSION"/g ./$GENARTS_TUTTLE/DEBIAN/control
+sed -i s/__REVISION__/"$REVISION"/g ./$GENARTS_TUTTLE/DEBIAN/control
+sed -i s/__ARCH__/"$ARCH"/g ./$GENARTS_TUTTLE/DEBIAN/control
 
 # Copy postinst file
-cp ./postinst ./genarts-tuttle/DEBIAN
+cp ./postinst ./$GENARTS_TUTTLE/DEBIAN
 
 # Copy postrm file
-cp ./postrm ./genarts-tuttle/DEBIAN
+cp ./postrm ./$GENARTS_TUTTLE/DEBIAN
 
 # Copy conf file
-cp ./genarts-tuttle.conf ./genarts-tuttle/etc/ld.so.conf.d
+cp ./$GENARTS_TUTTLE.conf ./$GENARTS_TUTTLE/etc/ld.so.conf.d
 
 # Copy shared Libraries
-cp ../TuttleOFX/3rdParty/lib/* ./genarts-tuttle/usr/lib/GenArts
+cp ../TuttleOFX/3rdParty/lib/* ./$GENARTS_TUTTLE/usr/lib/GenArts
 
 # Copy binaries
-cp /home/build/bin/* ./genarts-tuttle/usr/bin
-cp ../TuttleOFX/dist/ubuntu/gcc-4.6/production/bin/* ./genarts-tuttle/usr/bin
+cp /home/build/bin/* ./$GENARTS_TUTTLE/usr/bin
+cp ../TuttleOFX/dist/ubuntu/gcc-4.6/production/bin/* ./$GENARTS_TUTTLE/usr/bin
 
 # Copy Python
-cp -r ../TuttleOFX/dist/ubuntu/gcc-4.6/production/python/* ./genarts-tuttle/usr/lib/python2.7/dist-packages
+cp -r ../TuttleOFX/dist/ubuntu/gcc-4.6/production/python/* ./$GENARTS_TUTTLE/usr/lib/python2.7/dist-packages
 
 # Copy Plugins
-cp -r ../TuttleOFX/dist/ubuntu/gcc-4.6/production/plugin/* ./genarts-tuttle/usr/OFX/Plugins
+cp -r ../TuttleOFX/dist/ubuntu/gcc-4.6/production/plugin/* ./$GENARTS_TUTTLE/usr/OFX/Plugins
 
 # Build deb file as fakeroot
-fakeroot dpkg-deb --build genarts-tuttle
+fakeroot dpkg-deb --build $GENARTS_TUTTLE

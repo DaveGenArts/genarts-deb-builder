@@ -3,8 +3,8 @@ Priority: optional
 Section: devel
 Installed-Size: 322151
 Maintainer: David Barker (dave.barker@genarts.com)
-Architecture: amd64
-Version: 0.9-8
+Architecture: __ARCH__
+Version: __VERSION__-__REVISION__
 Depends: libvdpau1
 Description: GenArts Tuttle package
 
