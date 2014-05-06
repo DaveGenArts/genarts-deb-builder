@@ -81,7 +81,7 @@ cp ./postinst ./$GENARTS_TUTTLE/DEBIAN
 cp ./postrm ./$GENARTS_TUTTLE/DEBIAN
 
 # Copy conf file
-cp ./$GENARTS_TUTTLE.conf ./$GENARTS_TUTTLE/etc/ld.so.conf.d
+cp ./genarts-tuttle.conf ./$GENARTS_TUTTLE/etc/ld.so.conf.d
 
 # Copy shared Libraries
 cp ../TuttleOFX/3rdParty/lib/* ./$GENARTS_TUTTLE/usr/lib/GenArts
