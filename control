@@ -5,6 +5,6 @@ Installed-Size: 322151
 Maintainer: David Barker (dave.barker@genarts.com)
 Architecture: __ARCH__
 Version: __VERSION__-__REVISION__
-Depends: libvdpau1
+Depends: libvdpau1, libva1, libass4, libmp3lame0, libglade2-0, libsdl1.2debian, libtheora0
 Description: GenArts Tuttle package
 
