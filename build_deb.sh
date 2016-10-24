@@ -87,14 +87,17 @@ cp ./genarts-tuttle.conf ./$GENARTS_TUTTLE/etc/ld.so.conf.d
 cp ../TuttleOFX/3rdParty/lib/* ./$GENARTS_TUTTLE/usr/lib/GenArts
 
 # Copy binaries
-cp /home/build/bin/* ./$GENARTS_TUTTLE/usr/bin
-cp ../TuttleOFX/dist/ubuntu/gcc-4.6/production/bin/* ./$GENARTS_TUTTLE/usr/bin
+cp /home/ubuntu/bin/ffmpeg ./$GENARTS_TUTTLE/usr/bin
+cp /home/ubuntu/bin/ffprobe ./$GENARTS_TUTTLE/usr/bin
+cp /home/ubuntu/bin/ffserver ./$GENARTS_TUTTLE/usr/bin
+cp /home/ubuntu/bin/qt-faststart ./$GENARTS_TUTTLE/usr/bin
+cp ../TuttleOFX/dist/ip-10-0-3-180/gcc-4.6/production/bin/* ./$GENARTS_TUTTLE/usr/bin
 
 # Copy Python
-cp -r ../TuttleOFX/dist/ubuntu/gcc-4.6/production/python/* ./$GENARTS_TUTTLE/usr/lib/python2.7/dist-packages
+cp -r ../TuttleOFX/dist/ip-10-0-3-180/gcc-4.6/production/python/* ./$GENARTS_TUTTLE/usr/lib/python2.7/dist-packages
 
 # Copy Plugins
-cp -r ../TuttleOFX/dist/ubuntu/gcc-4.6/production/plugin/* ./$GENARTS_TUTTLE/usr/OFX/Plugins
+cp -r ../TuttleOFX/dist/ip-10-0-3-180/gcc-4.6/production/plugin/* ./$GENARTS_TUTTLE/usr/OFX/Plugins
 
 # Build deb file as fakeroot
 fakeroot dpkg-deb --build $GENARTS_TUTTLE
